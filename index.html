@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Smart Library System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            background: white;
+            border-radius: 30px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .page {
+            display: none;
+        }
+        .page.active {
+            display: block;
+        }
+        h1 {
+            color: #2A4B7C;
+            margin-bottom: 20px;
+            font-size: 2.5em;
+        }
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .home-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            padding: 15px 40px;
+            font-size: 18px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        .btn-primary {
+            background: #2A4B7C;
+            color: white;
+        }
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .floor-selector select {
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+        }
+        .stats {
+            display: flex;
+            gap: 30px;
+            background: #f8f9fa;
+            padding: 15px 25px;
+            border-radius: 15px;
+            font-weight: bold;
+        }
+        .filter-btn {
+            background: white;
+            border: 2px solid #2A4B7C;
+            color: #2A4B7C;
+            padding: 10px 25px;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .filter-btn.active {
+            background: #2A4B7C;
+            color: white;
+        }
+        .seat-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 15px;
+            margin: 40px 0;
+        }
+        .seat {
+            aspect-ratio: 1;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        .seat:hover {
+            transform: scale(1.05);
+        }
+        .seat.free {
+            background: linear-gradient(145deg, #28A745, #218838);
+            color: white;
+        }
+        .seat.occupied {
+            background: linear-gradient(145deg, #DC3545, #c82333);
+            color: white;
+        }
+        .seat-number {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+        .socket-icon {
+            font-size: 16px;
+            background: rgba(255,255,255,0.3);
+            padding: 2px 8px;
+            border-radius: 20px;
+        }
+        .free-at {
+            font-size: 12px;
+            margin-top: 5px;
+            background: rgba(0,0,0,0.2);
+            padding: 2px 6px;
+            border-radius: 10px;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .modal.active {
+            display: flex;
+        }
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            max-width: 400px;
+            width: 90%;
+            position: relative;
+        }
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 28px;
+            cursor: pointer;
+            color: #666;
+        }
+        .book-btn {
+            background: #2A4B7C;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            width: 100%;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .book-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .duration-select {
+            width: 100%;
+            padding: 10px;
+            margin: 15px 0;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+        }
+        .booking-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 15px 0;
+            border-left: 5px solid #2A4B7C;
+        }
+        .past-booking {
+            border-left-color: #6c757d;
+            opacity: 0.8;
+        }
+        .action-btn {
+            padding: 8px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .extend-btn {
+            background: #28a745;
+            color: white;
+        }
+        .thankyou {
+            text-align: center;
+            padding: 50px;
+            font-size: 24px;
+            color: #28a745;
+        }
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HOME PAGE -->
+        <div id="homePage" class="page active">
+            <h1>📚 Smart Library System</h1>
+            <h2>Welcome to the Library!</h2>
+            <div class="home-buttons">
+                <button class="btn btn-primary" onclick="showSeatMap()">Continue to Seat Map</button>
+                <button class="btn btn-secondary" onclick="showBookings()">View My Bookings</button>
+                <button class="btn btn-secondary" onclick="showQuit()">Quit</button>
+            </div>
+        </div>
+
+        <!-- SEAT MAP PAGE -->
+        <div id="seatMapPage" class="page">
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="showHome()">← Home</button>
+                <button class="btn btn-secondary" onclick="showBookings()">📋 My Bookings</button>
+            </div>
+            
+            <h1>Library Floor Map</h1>
+            
+            <div class="header">
+                <div class="floor-selector">
+                    <select id="floorSelect">
+                        <option value="Ground">Ground Floor ▼</option>
+                    </select>
+                </div>
+                
+                <div class="stats" id="stats">
+                    <span>🟢 Free: <span id="freeCount">0</span></span>
+                    <span>🔴 Occupied: <span id="occupiedCount">0</span></span>
+                    <span>⚡ Sockets: <span id="socketCount">0</span></span>
+                </div>
+                
+                <button class="filter-btn" id="filterBtn" onclick="toggleFilter()">Filter: With Socket Only</button>
+            </div>
+
+            <div id="seatGrid" class="seat-grid"></div>
+        </div>
+
+        <!-- MY BOOKINGS PAGE -->
+        <div id="bookingsPage" class="page">
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="showHome()">← Home</button>
+                <button class="btn btn-secondary" onclick="showSeatMap()">🗺️ Seat Map</button>
+            </div>
+            
+            <h1>📋 My Bookings</h1>
+            
+            <h2>🔵 Active Booking</h2>
+            <div id="activeBookings"></div>
+            
+            <h2>📜 Past Bookings</h2>
+            <div id="pastBookings"></div>
+        </div>
+
+        <!-- CONFIRMATION PAGE -->
+        <div id="confirmationPage" class="page">
+            <div class="thankyou">
+                ✅ Booking Confirmed!
+            </div>
+            <div id="confirmationDetails" style="text-align: center; margin: 30px;"></div>
+            <div style="display: flex; gap: 20px; justify-content: center;">
+                <button class="btn btn-primary" onclick="showSeatMap()">Continue to Seat Map</button>
+                <button class="btn btn-secondary" onclick="showBookings()">View My Bookings</button>
+            </div>
+        </div>
+
+        <!-- QUIT PAGE -->
+        <div id="quitPage" class="page">
+            <div class="thankyou">
+                🙏 Thank you for visiting!<br>
+                Have a great day!
+            </div>
+            <div style="text-align: center; margin-top: 30px;">
+                <button class="btn btn-primary" onclick="showHome()">Back to Home</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SEAT DETAILS MODAL -->
+    <div id="seatModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <h2 id="modalSeatNumber">Seat Details</h2>
+            <div id="modalDetails"></div>
+            
+            <div id="bookingSection">
+                <select id="durationSelect" class="duration-select">
+                    <option value="1">1 hour</option>
+                    <option value="2" selected>2 hours</option>
+                    <option value="3">3 hours</option>
+                    <option value="4">4 hours (max)</option>
+                </select>
+                <button class="book-btn" id="bookBtn" onclick="bookSeat()">Book Seat</button>
+            </div>
+            
+            <div id="occupiedMessage" style="display: none; color: #DC3545; text-align: center; padding: 20px;">
+                This seat is currently occupied until <span id="freeAtTime"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK (with update import) -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.11/firebase-app.js';
+        import { getDatabase, ref, onValue, update } from 'https://www.gstatic.com/firebasejs/9.6.11/firebase-database.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBzdP0-DPa8xMQa_U5Fc_0ASZwQ34r4KKA",
+            authDomain: "smart-library-system-64dae.firebaseapp.com",
+            databaseURL: "https://smart-library-system-64dae-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "smart-library-system-64dae",
+            storageBucket: "smart-library-system-64dae.firebasestorage.app",
+            messagingSenderId: "1085560201075",
+            appId: "1:1085560201075:web:42d14c2fcc922b8318af06"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+        
+        window.database = database;
+        window.ref = ref;
+        window.onValue = onValue;
+        window.update = update;
+
+        window.loadSeats = function() {
+            const seatsRef = ref(database, 'seats');
+            onValue(seatsRef, (snapshot) => {
+                window.currentSeats = snapshot.val() || {};
+                displaySeats(window.currentSeats);
+                updateStats(window.currentSeats);
+            });
+        };
+
+        window.loadSeats();
+    </script>
+
+    <script>
+        let currentSeats = {};
+        let filterActive = false;
+        let selectedSeat = null;
+        let bookings = JSON.parse(localStorage.getItem('bookings')) || [];
+
+        // Navigation
+        window.showHome = function() {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('homePage').classList.add('active');
+            closeModal();
+        };
+
+        window.showSeatMap = function() {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('seatMapPage').classList.add('active');
+            closeModal();
+            if (currentSeats) displaySeats(currentSeats);
+        };
+
+        window.showBookings = function() {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('bookingsPage').classList.add('active');
+            displayBookings();
+            closeModal();
+        };
+
+        window.showQuit = function() {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('quitPage').classList.add('active');
+        };
+
+        // Seat display
+        function displaySeats(seats) {
+            currentSeats = seats;
+            const grid = document.getElementById('seatGrid');
+            let html = '';
+            
+            const seatIds = Object.keys(seats).sort();
+            
+            seatIds.forEach(seatId => {
+                const seat = seats[seatId];
+                const status = seat.status || 'free';
+                const socket = seat.socket || false;
+                
+                if (filterActive && !socket) return;
+                
+                let freeAtHtml = '';
+                if (status === 'occupied' && seat.freeAt) {
+                    freeAtHtml = `<div class="free-at">🕒 Free at ${seat.freeAt}</div>`;
+                }
+                
+                html += `
+                    <div class="seat ${status}" onclick="showSeatDetails('${seatId}')">
+                        <div class="seat-number">${seatId}</div>
+                        ${socket ? '<div class="socket-icon">⚡</div>' : ''}
+                        ${freeAtHtml}
+                    </div>
+                `;
+            });
+            
+            grid.innerHTML = html || '<div style="text-align: center; padding: 50px;">No seats match filter</div>';
+        }
+
+        function updateStats(seats) {
+            let free = 0, occupied = 0, sockets = 0;
+            Object.values(seats).forEach(seat => {
+                if (seat.status === 'free') free++;
+                else if (seat.status === 'occupied') occupied++;
+                if (seat.socket) sockets++;
+            });
+            document.getElementById('freeCount').textContent = free;
+            document.getElementById('occupiedCount').textContent = occupied;
+            document.getElementById('socketCount').textContent = sockets;
+        }
+
+        window.toggleFilter = function() {
+            filterActive = !filterActive;
+            document.getElementById('filterBtn').classList.toggle('active');
+            displaySeats(currentSeats);
+        };
+
+        // Seat details modal
+        window.showSeatDetails = function(seatId) {
+            selectedSeat = seatId;
+            const seat = currentSeats[seatId];
+            
+            document.getElementById('modalSeatNumber').textContent = `Seat ${seatId} Details`;
+            
+            const detailsHtml = `
+                <div>📍 Location: ${seat.location || 'Center'}, Ground Floor</div>
+                <div>⚡ Socket: ${seat.socket ? '✅ Available' : '❌ Not Available'}</div>
+                <div>❄️ Near AC: ${seat.ac ? '✅ Yes' : '❌ No'}</div>
+            `;
+            document.getElementById('modalDetails').innerHTML = detailsHtml;
+            
+            if (seat.status === 'occupied') {
+                document.getElementById('bookingSection').style.display = 'none';
+                document.getElementById('occupiedMessage').style.display = 'block';
+                document.getElementById('freeAtTime').textContent = seat.freeAt || 'unknown';
+            } else {
+                document.getElementById('bookingSection').style.display = 'block';
+                document.getElementById('occupiedMessage').style.display = 'none';
+            }
+            
+            document.getElementById('seatModal').classList.add('active');
+        };
+
+        window.closeModal = function() {
+            document.getElementById('seatModal').classList.remove('active');
+        };
+
+        // ✅ FIXED: Book seat with Firebase update
+        window.bookSeat = function() {
+            const seat = currentSeats[selectedSeat];
+            if (seat.status !== 'free') return;
+            
+            const duration = parseInt(document.getElementById('durationSelect').value);
+            const now = new Date();
+            const endTime = new Date(now.getTime() + duration * 60 * 60 * 1000);
+            
+            const formatTime = (date) => {
+                return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            };
+            
+            const freeAt = formatTime(endTime);
+            
+            // Update Firebase
+            const db = window.database;
+            const updates = {};
+            updates[`seats/${selectedSeat}/status`] = 'occupied';
+            updates[`seats/${selectedSeat}/freeAt`] = freeAt;
+            
+            window.update(ref(db), updates).then(() => {
+                console.log('✅ Firebase updated: seat occupied');
+                
+                // Update local data
+                if (currentSeats[selectedSeat]) {
+                    currentSeats[selectedSeat].status = 'occupied';
+                    currentSeats[selectedSeat].freeAt = freeAt;
+                }
+                
+                // Save booking
+                const booking = {
+                    seat: selectedSeat,
+                    date: now.toLocaleDateString(),
+                    startTime: formatTime(now),
+                    endTime: formatTime(endTime),
+                    duration: duration,
+                    active: true
+                };
+                
+                bookings.push(booking);
+                localStorage.setItem('bookings', JSON.stringify(bookings));
+                
+                closeModal();
+                
+                // Show confirmation
+                document.getElementById('confirmationDetails').innerHTML = `
+                    <p><strong>Seat:</strong> ${selectedSeat}</p>
+                    <p><strong>Time:</strong> ${booking.startTime} – ${booking.endTime} (${duration} hr${duration > 1 ? 's' : ''})</p>
+                    <p style="color: #28A745; margin-top: 20px;">✅ Successfully registered</p>
+                `;
+                
+                document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+                document.getElementById('confirmationPage').classList.add('active');
+                
+                // Refresh display
+                displaySeats(currentSeats);
+                updateStats(currentSeats);
+                
+            }).catch((error) => {
+                console.error('❌ Firebase update failed:', error);
+                alert('Booking failed. Please try again.');
+            });
+        };
+
+        // Display bookings
+        function displayBookings() {
+            const activeDiv = document.getElementById('activeBookings');
+            const pastDiv = document.getElementById('pastBookings');
+            
+            const active = bookings.filter(b => b.active);
+            const past = bookings.filter(b => !b.active);
+            
+            if (active.length === 0) {
+                activeDiv.innerHTML = '<p>No active bookings</p>';
+            } else {
+                activeDiv.innerHTML = active.map(b => `
+                    <div class="booking-card">
+                        <h3>Seat ${b.seat}</h3>
+                        <p>📅 ${b.date} | ${b.startTime} – ${b.endTime} (${b.duration} hrs)</p>
+                        <div>
+                            ${b.duration < 4 ? `<button class="action-btn extend-btn" onclick="extendBooking('${b.seat}')">Extend +1 hr</button>` : ''}
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            if (past.length === 0) {
+                pastDiv.innerHTML = '<p>No past bookings</p>';
+            } else {
+                pastDiv.innerHTML = past.map(b => `
+                    <div class="booking-card past-booking">
+                        <h3>Seat ${b.seat}</h3>
+                        <p>📅 ${b.date} | ${b.startTime} – ${b.endTime} (${b.duration} hrs)</p>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // Extend booking
+        window.extendBooking = function(seatId) {
+            const booking = bookings.find(b => b.seat === seatId && b.active);
+            if (booking && booking.duration < 4) {
+                booking.duration += 1;
+                
+                const end = new Date();
+                const [hours, minutes] = booking.endTime.split(':');
+                end.setHours(parseInt(hours) + 1, parseInt(minutes));
+                
+                booking.endTime = end.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                
+                localStorage.setItem('bookings', JSON.stringify(bookings));
+                displayBookings();
+            }
+        };
+
+        // Close modal on outside click
+        window.onclick = function(event) {
+            const modal = document.getElementById('seatModal');
+            if (event.target === modal) closeModal();
+        };
+    </script>
+</body>
+</html>
