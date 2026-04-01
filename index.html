@@ -25,235 +25,44 @@
             padding: 30px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
         }
-        .page {
-            display: none;
-        }
-        .page.active {
-            display: block;
-        }
-        h1 {
-            color: #2A4B7C;
-            margin-bottom: 20px;
-            font-size: 2.5em;
-        }
-        h2 {
-            color: #333;
-            margin-bottom: 20px;
-        }
-        h3 {
-            color: #2A4B7C;
-            margin: 20px 0 10px 0;
-            font-size: 1.4em;
-        }
-        .home-buttons {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            margin-top: 40px;
-            flex-wrap: wrap;
-        }
-        .btn {
-            padding: 15px 40px;
-            font-size: 18px;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-        }
-        .btn-primary {
-            background: #2A4B7C;
-            color: white;
-        }
-        .btn-secondary {
-            background: #6c757d;
-            color: white;
-        }
-        .btn-danger {
-            background: #DC3545;
-            color: white;
-        }
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-        .stats {
-            display: flex;
-            gap: 30px;
-            background: #f8f9fa;
-            padding: 15px 25px;
-            border-radius: 15px;
-            font-weight: bold;
-        }
-        .filter-btn {
-            background: white;
-            border: 2px solid #2A4B7C;
-            color: #2A4B7C;
-            padding: 10px 25px;
-            border-radius: 10px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .filter-btn.active {
-            background: #2A4B7C;
-            color: white;
-        }
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            margin-bottom: 30px;
-        }
-        .seat-grid {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 15px;
-            margin: 20px 0;
-        }
-        .seat {
-            aspect-ratio: 1;
-            border-radius: 12px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            cursor: pointer;
-            transition: transform 0.2s, opacity 0.3s;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            position: relative;
-        }
-        .seat:hover {
-            transform: scale(1.05);
-        }
-        .seat.free {
-            background: linear-gradient(145deg, #28A745, #218838);
-            color: white;
-        }
-        .seat.occupied {
-            background: linear-gradient(145deg, #DC3545, #c82333);
-            color: white;
-        }
-        .seat-number {
-            font-size: 18px;
-            margin-bottom: 5px;
-        }
-        .socket-icon {
-            font-size: 16px;
-            background: rgba(255,255,255,0.3);
-            padding: 2px 8px;
-            border-radius: 20px;
-        }
-        .last-seen {
-            font-size: 10px;
-            margin-top: 5px;
-            background: rgba(0,0,0,0.2);
-            padding: 2px 6px;
-            border-radius: 10px;
-        }
-        .heatmap-low {
-            opacity: 0.5;
-        }
-        .heatmap-medium {
-            opacity: 0.7;
-        }
-        .heatmap-high {
-            opacity: 1;
-        }
-        .history-container, .admin-panel {
-            background: #f8f9fa;
-            border-radius: 20px;
-            padding: 20px;
-            margin-top: 20px;
-        }
-        .history-item {
-            padding: 10px 15px;
-            border-bottom: 1px solid #e0e0e0;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+        .page { display: none; }
+        .page.active { display: block; }
+        h1 { color: #2A4B7C; margin-bottom: 20px; font-size: 2.5em; }
+        h2 { color: #333; margin-bottom: 20px; }
+        h3 { color: #2A4B7C; margin: 20px 0 10px 0; font-size: 1.4em; }
+        .home-buttons, .nav-buttons { display: flex; gap: 20px; justify-content: center; margin: 20px 0; flex-wrap: wrap; }
+        .btn { padding: 12px 30px; font-size: 16px; border: none; border-radius: 50px; cursor: pointer; font-weight: bold; transition: transform 0.3s; }
+        .btn:hover { transform: translateY(-3px); }
+        .btn-primary { background: #2A4B7C; color: white; }
+        .btn-secondary { background: #6c757d; color: white; }
+        .btn-danger { background: #DC3545; color: white; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 20px; }
+        .stats { display: flex; gap: 30px; background: #f8f9fa; padding: 15px 25px; border-radius: 15px; font-weight: bold; }
+        .filter-btn { background: white; border: 2px solid #2A4B7C; color: #2A4B7C; padding: 10px 25px; border-radius: 10px; cursor: pointer; }
+        .filter-btn.active { background: #2A4B7C; color: white; }
+        .seat-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 15px; margin: 40px 0; }
+        .seat { aspect-ratio: 1; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; transition: transform 0.2s; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .seat:hover { transform: scale(1.05); }
+        .seat.free { background: linear-gradient(145deg, #28A745, #218838); color: white; }
+        .seat.occupied { background: linear-gradient(145deg, #DC3545, #c82333); color: white; }
+        .seat-number { font-size: 18px; margin-bottom: 5px; }
+        .socket-icon { font-size: 16px; background: rgba(255,255,255,0.3); padding: 2px 8px; border-radius: 20px; }
+        .last-seen { font-size: 10px; margin-top: 5px; background: rgba(0,0,0,0.2); padding: 2px 6px; border-radius: 10px; }
+        .history-container, .admin-panel { background: #f8f9fa; border-radius: 20px; padding: 20px; margin-top: 20px; }
+        .history-item { padding: 10px 15px; border-bottom: 1px solid #e0e0e0; font-size: 14px; display: flex; align-items: center; gap: 10px; }
         .history-occupied { color: #DC3545; font-weight: bold; }
         .history-free { color: #28A745; font-weight: bold; }
         .history-time { color: #666; font-size: 12px; }
-        .alert-popup {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: #28A745;
-            color: white;
-            padding: 15px 25px;
-            border-radius: 10px;
-            z-index: 2000;
-            animation: slideIn 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        .chart-container {
-            background: white;
-            padding: 20px;
-            border-radius: 15px;
-            margin-top: 20px;
-        }
-        .admin-log {
-            max-height: 200px;
-            overflow-y: auto;
-            font-family: monospace;
-            font-size: 12px;
-            background: #2d3748;
-            color: #a0aec0;
-            padding: 15px;
-            border-radius: 10px;
-        }
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-        }
-        .modal.active {
-            display: flex;
-        }
-        .modal-content {
-            background: white;
-            padding: 30px;
-            border-radius: 20px;
-            max-width: 400px;
-            width: 90%;
-            position: relative;
-        }
-        .close-modal {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            font-size: 28px;
-            cursor: pointer;
-            color: #666;
-        }
-        .nav-buttons {
-            display: flex;
-            gap: 15px;
-            margin: 20px 0;
-            flex-wrap: wrap;
-        }
+        .alert-popup { position: fixed; top: 20px; right: 20px; background: #28A745; color: white; padding: 15px 25px; border-radius: 10px; z-index: 2000; animation: slideIn 0.3s ease; }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .chart-container { background: white; padding: 20px; border-radius: 15px; margin-top: 20px; }
+        .admin-log { max-height: 200px; overflow-y: auto; font-family: monospace; font-size: 12px; background: #2d3748; color: #a0aec0; padding: 15px; border-radius: 10px; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); align-items: center; justify-content: center; z-index: 1000; }
+        .modal.active { display: flex; }
+        .modal-content { background: white; padding: 30px; border-radius: 20px; max-width: 400px; width: 90%; position: relative; }
+        .close-modal { position: absolute; top: 15px; right: 20px; font-size: 28px; cursor: pointer; color: #666; }
+        select, input { padding: 10px; border-radius: 8px; border: 1px solid #ddd; font-size: 14px; }
+        .thankyou { text-align: center; padding: 50px; font-size: 24px; color: #28A745; }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -276,9 +85,7 @@
                 <button class="btn btn-secondary" onclick="showHome()">← Home</button>
                 <button class="btn btn-secondary" onclick="showAdmin()">🔧 Admin</button>
             </div>
-            
             <h1>Library Floor Map</h1>
-            
             <div class="header">
                 <div class="stats" id="stats">
                     <span>🟢 Free: <span id="freeCount">0</span></span>
@@ -287,21 +94,14 @@
                 </div>
                 <button class="filter-btn" id="filterBtn" onclick="toggleFilter()">Filter: With Socket Only</button>
             </div>
-
             <div id="seatGrid" class="seat-grid"></div>
-            
-            <!-- Peak Hours Chart -->
             <div class="chart-container">
                 <h3>📊 Peak Hours (Last 24 Hours)</h3>
                 <canvas id="peakHoursChart" width="400" height="200"></canvas>
             </div>
-            
-            <!-- History Section -->
             <div class="history-container">
                 <h3>📜 Seat Activity History (A1)</h3>
-                <div id="historyList">
-                    <div class="history-item">Loading history...</div>
-                </div>
+                <div id="historyList">Loading history...</div>
             </div>
         </div>
 
@@ -311,35 +111,30 @@
                 <button class="btn btn-secondary" onclick="showHome()">← Home</button>
                 <button class="btn btn-secondary" onclick="showSeatMap()">🗺️ Seat Map</button>
             </div>
-            
             <h1>🔧 Admin Panel</h1>
-            
             <div class="admin-panel">
                 <h3>Seat Management</h3>
                 <div style="margin: 20px 0;">
                     <label>Select Seat: </label>
                     <select id="adminSeatSelect">
-                        <option value="A1">A1</option>
-                        <option value="A2">A2</option>
-                        <option value="A3">A3</option>
+                        <option value="A1">A1</option><option value="A2">A2</option><option value="A3">A3</option><option value="A4">A4</option><option value="A5">A5</option>
+                        <option value="B1">B1</option><option value="B2">B2</option><option value="B3">B3</option><option value="B4">B4</option><option value="B5">B5</option>
+                        <option value="C1">C1</option><option value="C2">C2</option><option value="C3">C3</option><option value="C4">C4</option><option value="C5">C5</option>
+                        <option value="D1">D1</option><option value="D2">D2</option><option value="D3">D3</option><option value="D4">D4</option><option value="D5">D5</option>
+                        <option value="E1">E1</option><option value="E2">E2</option><option value="E3">E3</option><option value="E4">E4</option><option value="E5">E5</option>
+                        <option value="F1">F1</option><option value="F2">F2</option><option value="F3">F3</option><option value="F4">F4</option><option value="F5">F5</option>
                     </select>
                     <button class="btn btn-primary" onclick="adminSetFree()">Set Free</button>
                     <button class="btn btn-danger" onclick="adminSetOccupied()">Set Occupied</button>
                 </div>
-                
                 <h3>System Logs</h3>
-                <div id="adminLogs" class="admin-log">
-                    Loading logs...
-                </div>
+                <div id="adminLogs" class="admin-log">Loading logs...</div>
             </div>
         </div>
 
         <!-- QUIT PAGE -->
         <div id="quitPage" class="page">
-            <div class="thankyou">
-                🙏 Thank you for visiting!<br>
-                Have a great day!
-            </div>
+            <div class="thankyou">🙏 Thank you for visiting!<br>Have a great day!</div>
             <div style="text-align: center; margin-top: 30px;">
                 <button class="btn btn-primary" onclick="showHome()">Back to Home</button>
             </div>
@@ -355,10 +150,9 @@
         </div>
     </div>
 
-    <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.11/firebase-app.js';
-        import { getDatabase, ref, onValue, update, push } from 'https://www.gstatic.com/firebasejs/9.6.11/firebase-database.js';
+        import { getDatabase, ref, onValue, update } from 'https://www.gstatic.com/firebasejs/9.6.11/firebase-database.js';
 
         const firebaseConfig = {
             apiKey: "AIzaSyBzdP0-DPa8xMQa_U5Fc_0ASZwQ34r4KKA",
@@ -377,7 +171,6 @@
         window.ref = ref;
         window.onValue = onValue;
         window.update = update;
-        window.push = push;
 
         window.loadSeats = function() {
             const seatsRef = ref(database, 'seats');
@@ -385,7 +178,6 @@
                 window.currentSeats = snapshot.val() || {};
                 displaySeats(window.currentSeats);
                 updateStats(window.currentSeats);
-                updateHeatmap(window.currentSeats);
                 updateChart(window.currentSeats);
             });
         };
@@ -395,28 +187,17 @@
             onValue(historyRef, (snapshot) => {
                 const history = snapshot.val() || {};
                 const historyList = document.getElementById('historyList');
-                
                 if (Object.keys(history).length === 0) {
                     historyList.innerHTML = '<div class="history-item">No history available</div>';
                     return;
                 }
-                
                 const historyArray = Object.entries(history)
                     .map(([timestamp, event]) => ({ timestamp, event }))
                     .sort((a, b) => parseInt(b.timestamp) - parseInt(a.timestamp))
                     .slice(0, 20);
-                
                 historyList.innerHTML = historyArray.map(item => {
                     const isOccupied = item.event.includes('occupied');
-                    return `
-                        <div class="history-item">
-                            <span class="${isOccupied ? 'history-occupied' : 'history-free'}">
-                                ${isOccupied ? '🔴 OCCUPIED' : '🟢 FREE'}
-                            </span>
-                            <span>${item.event}</span>
-                            <span class="history-time">${new Date(parseInt(item.timestamp) * 1000).toLocaleTimeString()}</span>
-                        </div>
-                    `;
+                    return `<div class="history-item"><span class="${isOccupied ? 'history-occupied' : 'history-free'}">${isOccupied ? '🔴 OCCUPIED' : '🟢 FREE'}</span><span>${item.event}</span><span class="history-time">${new Date(parseInt(item.timestamp) * 1000).toLocaleTimeString()}</span></div>`;
                 }).join('');
             });
         };
@@ -430,9 +211,7 @@
         let filterActive = false;
         let selectedSeat = null;
         let occupancyChart = null;
-        let lastSeenTime = {};
 
-        // Navigation
         window.showHome = function() {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById('homePage').classList.add('active');
@@ -459,37 +238,19 @@
             document.getElementById('quitPage').classList.add('active');
         };
 
-        // Seat display with last seen
         function displaySeats(seats) {
             currentSeats = seats;
             const grid = document.getElementById('seatGrid');
             let html = '';
-            
             const seatIds = Object.keys(seats).sort();
-            
             seatIds.forEach(seatId => {
                 const seat = seats[seatId];
                 const status = seat.status || 'free';
                 const socket = seat.socket || false;
                 const lastSeen = seat.lastSeen || 'N/A';
-                
                 if (filterActive && !socket) return;
-                
-                let heatmapClass = '';
-                const popularity = seat.popularity || 0;
-                if (popularity < 30) heatmapClass = 'heatmap-low';
-                else if (popularity < 70) heatmapClass = 'heatmap-medium';
-                else heatmapClass = 'heatmap-high';
-                
-                html += `
-                    <div class="seat ${status} ${heatmapClass}" onclick="showSeatDetails('${seatId}')">
-                        <div class="seat-number">${seatId}</div>
-                        ${socket ? '<div class="socket-icon">⚡</div>' : ''}
-                        <div class="last-seen">🕒 ${lastSeen}</div>
-                    </div>
-                `;
+                html += `<div class="seat ${status}" onclick="showSeatDetails('${seatId}')"><div class="seat-number">${seatId}</div>${socket ? '<div class="socket-icon">⚡</div>' : ''}<div class="last-seen">🕒 ${lastSeen}</div></div>`;
             });
-            
             grid.innerHTML = html || '<div style="text-align: center; padding: 50px;">No seats match filter</div>';
         }
 
@@ -505,55 +266,23 @@
             document.getElementById('socketCount').textContent = sockets;
         }
 
-        function updateHeatmap(seats) {
-            // Update popularity based on occupancy frequency
-            Object.keys(seats).forEach(seatId => {
-                const seat = seats[seatId];
-                if (!seat.popularity) seat.popularity = 0;
-                if (seat.status === 'occupied') {
-                    seat.popularity = Math.min(100, seat.popularity + 1);
-                } else {
-                    seat.popularity = Math.max(0, seat.popularity - 0.5);
-                }
-                window.update(ref(window.database, `seats/${seatId}/popularity`), seat.popularity);
-            });
-        }
-
         function updateChart(seats) {
             const ctx = document.getElementById('peakHoursChart').getContext('2d');
             const hours = Array.from({length: 24}, (_, i) => i + ':00');
             const occupancyData = hours.map(() => 0);
-            
             Object.values(seats).forEach(seat => {
                 if (seat.hourlyData) {
-                    seat.hourlyData.forEach((val, i) => {
-                        occupancyData[i] += val;
-                    });
+                    seat.hourlyData.forEach((val, i) => { occupancyData[i] += val; });
                 }
             });
-            
             if (occupancyChart) {
                 occupancyChart.data.datasets[0].data = occupancyData;
                 occupancyChart.update();
             } else {
                 occupancyChart = new Chart(ctx, {
                     type: 'bar',
-                    data: {
-                        labels: hours,
-                        datasets: [{
-                            label: 'Occupancy Count',
-                            data: occupancyData,
-                            backgroundColor: '#2A4B7C',
-                            borderColor: '#1a3a5c',
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        scales: {
-                            y: { beginAtZero: true }
-                        }
-                    }
+                    data: { labels: hours, datasets: [{ label: 'Occupancy Count', data: occupancyData, backgroundColor: '#2A4B7C' }] },
+                    options: { responsive: true, scales: { y: { beginAtZero: true } } }
                 });
             }
         }
@@ -567,36 +296,23 @@
         window.showSeatDetails = function(seatId) {
             selectedSeat = seatId;
             const seat = currentSeats[seatId];
-            
             document.getElementById('modalSeatNumber').textContent = `Seat ${seatId} Details`;
-            
-            const detailsHtml = `
-                <div>📍 Location: ${seat.location || 'Center'}, Ground Floor</div>
-                <div>⚡ Socket: ${seat.socket ? '✅ Available' : '❌ Not Available'}</div>
-                <div>❄️ Near AC: ${seat.ac ? '✅ Yes' : '❌ No'}</div>
-                <div>📊 Popularity: ${Math.round(seat.popularity || 0)}%</div>
-                <div>🕒 Last Seen: ${seat.lastSeen || 'N/A'}</div>
-            `;
-            document.getElementById('modalDetails').innerHTML = detailsHtml;
-            
+            document.getElementById('modalDetails').innerHTML = `<div>📍 Location: ${seat.location || 'Center'}</div><div>⚡ Socket: ${seat.socket ? '✅ Available' : '❌ Not Available'}</div><div>❄️ Near AC: ${seat.ac ? '✅ Yes' : '❌ No'}</div><div>📊 Popularity: ${Math.round(seat.popularity || 0)}%</div><div>🕒 Last Seen: ${seat.lastSeen || 'N/A'}</div>`;
             document.getElementById('seatModal').classList.add('active');
         };
 
-        window.closeModal = function() {
-            document.getElementById('seatModal').classList.remove('active');
-        };
+        window.closeModal = function() { document.getElementById('seatModal').classList.remove('active'); };
 
-        // Admin functions
         window.adminSetFree = function() {
             const seatId = document.getElementById('adminSeatSelect').value;
-            window.update(ref(window.database, `seats/${seatId}/status`), 'free');
+            window.update(window.ref(window.database, `seats/${seatId}/status`), 'free');
             addAdminLog(`Admin set ${seatId} to FREE`);
             showAlert(`Seat ${seatId} has been set to FREE by admin`);
         };
 
         window.adminSetOccupied = function() {
             const seatId = document.getElementById('adminSeatSelect').value;
-            window.update(ref(window.database, `seats/${seatId}/status`), 'occupied');
+            window.update(window.ref(window.database, `seats/${seatId}/status`), 'occupied');
             addAdminLog(`Admin set ${seatId} to OCCUPIED`);
             showAlert(`Seat ${seatId} has been set to OCCUPIED by admin`);
         };
@@ -611,13 +327,8 @@
         function loadAdminLogs() {
             const logs = JSON.parse(localStorage.getItem('adminLogs') || '[]');
             const logDiv = document.getElementById('adminLogs');
-            if (logs.length === 0) {
-                logDiv.innerHTML = 'No logs yet';
-            } else {
-                logDiv.innerHTML = logs.map(log => 
-                    `<div>[${log.time}] ${log.message}</div>`
-                ).join('');
-            }
+            if (logs.length === 0) logDiv.innerHTML = 'No logs yet';
+            else logDiv.innerHTML = logs.map(log => `<div>[${log.time}] ${log.message}</div>`).join('');
         }
 
         function showAlert(message) {
@@ -628,44 +339,7 @@
             setTimeout(() => alertDiv.remove(), 3000);
         }
 
-        // Update last seen and track hourly data
-        setInterval(() => {
-            if (currentSeats) {
-                Object.keys(currentSeats).forEach(seatId => {
-                    const seat = currentSeats[seatId];
-                    const hour = new Date().getHours();
-                    if (!seat.hourlyData) seat.hourlyData = new Array(24).fill(0);
-                    if (seat.status === 'occupied') {
-                        seat.hourlyData[hour]++;
-                        window.update(ref(window.database, `seats/${seatId}/hourlyData`), seat.hourlyData);
-                    }
-                    seat.lastSeen = new Date().toLocaleTimeString();
-                    window.update(ref(window.database, `seats/${seatId}/lastSeen`), seat.lastSeen);
-                });
-                displaySeats(currentSeats);
-                updateChart(currentSeats);
-            }
-        }, 60000); // Update every minute
-
-        // Alert when seat becomes free
-        let previousStatus = {};
-        setInterval(() => {
-            if (currentSeats) {
-                Object.keys(currentSeats).forEach(seatId => {
-                    const current = currentSeats[seatId].status;
-                    const prev = previousStatus[seatId];
-                    if (prev === 'occupied' && current === 'free') {
-                        showAlert(`🎉 Seat ${seatId} is now FREE!`);
-                    }
-                    previousStatus[seatId] = current;
-                });
-            }
-        }, 5000);
-
-        window.onclick = function(event) {
-            const modal = document.getElementById('seatModal');
-            if (event.target === modal) closeModal();
-        };
+        window.onclick = function(event) { const modal = document.getElementById('seatModal'); if (event.target === modal) closeModal(); };
     </script>
 </body>
 </html>
