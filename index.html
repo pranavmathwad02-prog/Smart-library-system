@@ -18,7 +18,7 @@
             padding: 20px;
         }
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             width: 100%;
             background: white;
             border-radius: 30px;
@@ -39,6 +39,11 @@
         h2 {
             color: #333;
             margin-bottom: 20px;
+        }
+        h3 {
+            color: #2A4B7C;
+            margin: 20px 0 10px 0;
+            font-size: 1.4em;
         }
         .home-buttons {
             display: flex;
@@ -68,8 +73,8 @@
             background: #6c757d;
             color: white;
         }
-        .btn-success {
-            background: #28a745;
+        .btn-danger {
+            background: #DC3545;
             color: white;
         }
         .header {
@@ -79,12 +84,6 @@
             margin-bottom: 30px;
             flex-wrap: wrap;
             gap: 20px;
-        }
-        .floor-selector select {
-            padding: 10px 20px;
-            border-radius: 10px;
-            border: 1px solid #ddd;
-            font-size: 16px;
         }
         .stats {
             display: flex;
@@ -107,11 +106,17 @@
             background: #2A4B7C;
             color: white;
         }
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
         .seat-grid {
             display: grid;
             grid-template-columns: repeat(6, 1fr);
             gap: 15px;
-            margin: 40px 0;
+            margin: 20px 0;
         }
         .seat {
             aspect-ratio: 1;
@@ -122,7 +127,7 @@
             justify-content: center;
             font-weight: bold;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: transform 0.2s, opacity 0.3s;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
             position: relative;
         }
@@ -147,11 +152,69 @@
             padding: 2px 8px;
             border-radius: 20px;
         }
-        .free-at {
-            font-size: 12px;
+        .last-seen {
+            font-size: 10px;
             margin-top: 5px;
             background: rgba(0,0,0,0.2);
             padding: 2px 6px;
+            border-radius: 10px;
+        }
+        .heatmap-low {
+            opacity: 0.5;
+        }
+        .heatmap-medium {
+            opacity: 0.7;
+        }
+        .heatmap-high {
+            opacity: 1;
+        }
+        .history-container, .admin-panel {
+            background: #f8f9fa;
+            border-radius: 20px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .history-item {
+            padding: 10px 15px;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .history-occupied { color: #DC3545; font-weight: bold; }
+        .history-free { color: #28A745; font-weight: bold; }
+        .history-time { color: #666; font-size: 12px; }
+        .alert-popup {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #28A745;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            z-index: 2000;
+            animation: slideIn 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        .chart-container {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+        .admin-log {
+            max-height: 200px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 12px;
+            background: #2d3748;
+            color: #a0aec0;
+            padding: 15px;
             border-radius: 10px;
         }
         .modal {
@@ -185,59 +248,6 @@
             cursor: pointer;
             color: #666;
         }
-        .book-btn {
-            background: #2A4B7C;
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 10px;
-            font-size: 18px;
-            font-weight: bold;
-            width: 100%;
-            cursor: pointer;
-            margin-top: 20px;
-        }
-        .book-btn:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-        }
-        .duration-select {
-            width: 100%;
-            padding: 10px;
-            margin: 15px 0;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-            font-size: 16px;
-        }
-        .booking-card {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 15px;
-            margin: 15px 0;
-            border-left: 5px solid #2A4B7C;
-        }
-        .past-booking {
-            border-left-color: #6c757d;
-            opacity: 0.8;
-        }
-        .action-btn {
-            padding: 8px 20px;
-            margin: 5px;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        .extend-btn {
-            background: #28a745;
-            color: white;
-        }
-        .thankyou {
-            text-align: center;
-            padding: 50px;
-            font-size: 24px;
-            color: #28a745;
-        }
         .nav-buttons {
             display: flex;
             gap: 15px;
@@ -245,6 +255,7 @@
             flex-wrap: wrap;
         }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div class="container">
@@ -254,7 +265,7 @@
             <h2>Welcome to the Library!</h2>
             <div class="home-buttons">
                 <button class="btn btn-primary" onclick="showSeatMap()">Continue to Seat Map</button>
-                <button class="btn btn-secondary" onclick="showBookings()">View My Bookings</button>
+                <button class="btn btn-secondary" onclick="showAdmin()">Admin Panel</button>
                 <button class="btn btn-secondary" onclick="showQuit()">Quit</button>
             </div>
         </div>
@@ -263,55 +274,63 @@
         <div id="seatMapPage" class="page">
             <div class="nav-buttons">
                 <button class="btn btn-secondary" onclick="showHome()">← Home</button>
-                <button class="btn btn-secondary" onclick="showBookings()">📋 My Bookings</button>
+                <button class="btn btn-secondary" onclick="showAdmin()">🔧 Admin</button>
             </div>
             
             <h1>Library Floor Map</h1>
             
             <div class="header">
-                <div class="floor-selector">
-                    <select id="floorSelect">
-                        <option value="Ground">Ground Floor ▼</option>
-                    </select>
-                </div>
-                
                 <div class="stats" id="stats">
                     <span>🟢 Free: <span id="freeCount">0</span></span>
                     <span>🔴 Occupied: <span id="occupiedCount">0</span></span>
                     <span>⚡ Sockets: <span id="socketCount">0</span></span>
                 </div>
-                
                 <button class="filter-btn" id="filterBtn" onclick="toggleFilter()">Filter: With Socket Only</button>
             </div>
 
             <div id="seatGrid" class="seat-grid"></div>
+            
+            <!-- Peak Hours Chart -->
+            <div class="chart-container">
+                <h3>📊 Peak Hours (Last 24 Hours)</h3>
+                <canvas id="peakHoursChart" width="400" height="200"></canvas>
+            </div>
+            
+            <!-- History Section -->
+            <div class="history-container">
+                <h3>📜 Seat Activity History (A1)</h3>
+                <div id="historyList">
+                    <div class="history-item">Loading history...</div>
+                </div>
+            </div>
         </div>
 
-        <!-- MY BOOKINGS PAGE -->
-        <div id="bookingsPage" class="page">
+        <!-- ADMIN PANEL PAGE -->
+        <div id="adminPage" class="page">
             <div class="nav-buttons">
                 <button class="btn btn-secondary" onclick="showHome()">← Home</button>
                 <button class="btn btn-secondary" onclick="showSeatMap()">🗺️ Seat Map</button>
             </div>
             
-            <h1>📋 My Bookings</h1>
+            <h1>🔧 Admin Panel</h1>
             
-            <h2>🔵 Active Booking</h2>
-            <div id="activeBookings"></div>
-            
-            <h2>📜 Past Bookings</h2>
-            <div id="pastBookings"></div>
-        </div>
-
-        <!-- CONFIRMATION PAGE -->
-        <div id="confirmationPage" class="page">
-            <div class="thankyou">
-                ✅ Booking Confirmed!
-            </div>
-            <div id="confirmationDetails" style="text-align: center; margin: 30px;"></div>
-            <div style="display: flex; gap: 20px; justify-content: center;">
-                <button class="btn btn-primary" onclick="showSeatMap()">Continue to Seat Map</button>
-                <button class="btn btn-secondary" onclick="showBookings()">View My Bookings</button>
+            <div class="admin-panel">
+                <h3>Seat Management</h3>
+                <div style="margin: 20px 0;">
+                    <label>Select Seat: </label>
+                    <select id="adminSeatSelect">
+                        <option value="A1">A1</option>
+                        <option value="A2">A2</option>
+                        <option value="A3">A3</option>
+                    </select>
+                    <button class="btn btn-primary" onclick="adminSetFree()">Set Free</button>
+                    <button class="btn btn-danger" onclick="adminSetOccupied()">Set Occupied</button>
+                </div>
+                
+                <h3>System Logs</h3>
+                <div id="adminLogs" class="admin-log">
+                    Loading logs...
+                </div>
             </div>
         </div>
 
@@ -333,27 +352,13 @@
             <span class="close-modal" onclick="closeModal()">&times;</span>
             <h2 id="modalSeatNumber">Seat Details</h2>
             <div id="modalDetails"></div>
-            
-            <div id="bookingSection">
-                <select id="durationSelect" class="duration-select">
-                    <option value="1">1 hour</option>
-                    <option value="2" selected>2 hours</option>
-                    <option value="3">3 hours</option>
-                    <option value="4">4 hours (max)</option>
-                </select>
-                <button class="book-btn" id="bookBtn" onclick="bookSeat()">Book Seat</button>
-            </div>
-            
-            <div id="occupiedMessage" style="display: none; color: #DC3545; text-align: center; padding: 20px;">
-                This seat is currently occupied until <span id="freeAtTime"></span>
-            </div>
         </div>
     </div>
 
-    <!-- Firebase SDK (with update import) -->
+    <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.11/firebase-app.js';
-        import { getDatabase, ref, onValue, update } from 'https://www.gstatic.com/firebasejs/9.6.11/firebase-database.js';
+        import { getDatabase, ref, onValue, update, push } from 'https://www.gstatic.com/firebasejs/9.6.11/firebase-database.js';
 
         const firebaseConfig = {
             apiKey: "AIzaSyBzdP0-DPa8xMQa_U5Fc_0ASZwQ34r4KKA",
@@ -372,6 +377,7 @@
         window.ref = ref;
         window.onValue = onValue;
         window.update = update;
+        window.push = push;
 
         window.loadSeats = function() {
             const seatsRef = ref(database, 'seats');
@@ -379,17 +385,52 @@
                 window.currentSeats = snapshot.val() || {};
                 displaySeats(window.currentSeats);
                 updateStats(window.currentSeats);
+                updateHeatmap(window.currentSeats);
+                updateChart(window.currentSeats);
+            });
+        };
+        
+        window.loadHistory = function() {
+            const historyRef = ref(database, 'seats/A1/history');
+            onValue(historyRef, (snapshot) => {
+                const history = snapshot.val() || {};
+                const historyList = document.getElementById('historyList');
+                
+                if (Object.keys(history).length === 0) {
+                    historyList.innerHTML = '<div class="history-item">No history available</div>';
+                    return;
+                }
+                
+                const historyArray = Object.entries(history)
+                    .map(([timestamp, event]) => ({ timestamp, event }))
+                    .sort((a, b) => parseInt(b.timestamp) - parseInt(a.timestamp))
+                    .slice(0, 20);
+                
+                historyList.innerHTML = historyArray.map(item => {
+                    const isOccupied = item.event.includes('occupied');
+                    return `
+                        <div class="history-item">
+                            <span class="${isOccupied ? 'history-occupied' : 'history-free'}">
+                                ${isOccupied ? '🔴 OCCUPIED' : '🟢 FREE'}
+                            </span>
+                            <span>${item.event}</span>
+                            <span class="history-time">${new Date(parseInt(item.timestamp) * 1000).toLocaleTimeString()}</span>
+                        </div>
+                    `;
+                }).join('');
             });
         };
 
         window.loadSeats();
+        window.loadHistory();
     </script>
 
     <script>
         let currentSeats = {};
         let filterActive = false;
         let selectedSeat = null;
-        let bookings = JSON.parse(localStorage.getItem('bookings')) || [];
+        let occupancyChart = null;
+        let lastSeenTime = {};
 
         // Navigation
         window.showHome = function() {
@@ -403,13 +444,14 @@
             document.getElementById('seatMapPage').classList.add('active');
             closeModal();
             if (currentSeats) displaySeats(currentSeats);
+            window.loadHistory();
         };
 
-        window.showBookings = function() {
+        window.showAdmin = function() {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.getElementById('bookingsPage').classList.add('active');
-            displayBookings();
+            document.getElementById('adminPage').classList.add('active');
             closeModal();
+            loadAdminLogs();
         };
 
         window.showQuit = function() {
@@ -417,7 +459,7 @@
             document.getElementById('quitPage').classList.add('active');
         };
 
-        // Seat display
+        // Seat display with last seen
         function displaySeats(seats) {
             currentSeats = seats;
             const grid = document.getElementById('seatGrid');
@@ -429,19 +471,21 @@
                 const seat = seats[seatId];
                 const status = seat.status || 'free';
                 const socket = seat.socket || false;
+                const lastSeen = seat.lastSeen || 'N/A';
                 
                 if (filterActive && !socket) return;
                 
-                let freeAtHtml = '';
-                if (status === 'occupied' && seat.freeAt) {
-                    freeAtHtml = `<div class="free-at">🕒 Free at ${seat.freeAt}</div>`;
-                }
+                let heatmapClass = '';
+                const popularity = seat.popularity || 0;
+                if (popularity < 30) heatmapClass = 'heatmap-low';
+                else if (popularity < 70) heatmapClass = 'heatmap-medium';
+                else heatmapClass = 'heatmap-high';
                 
                 html += `
-                    <div class="seat ${status}" onclick="showSeatDetails('${seatId}')">
+                    <div class="seat ${status} ${heatmapClass}" onclick="showSeatDetails('${seatId}')">
                         <div class="seat-number">${seatId}</div>
                         ${socket ? '<div class="socket-icon">⚡</div>' : ''}
-                        ${freeAtHtml}
+                        <div class="last-seen">🕒 ${lastSeen}</div>
                     </div>
                 `;
             });
@@ -461,13 +505,65 @@
             document.getElementById('socketCount').textContent = sockets;
         }
 
+        function updateHeatmap(seats) {
+            // Update popularity based on occupancy frequency
+            Object.keys(seats).forEach(seatId => {
+                const seat = seats[seatId];
+                if (!seat.popularity) seat.popularity = 0;
+                if (seat.status === 'occupied') {
+                    seat.popularity = Math.min(100, seat.popularity + 1);
+                } else {
+                    seat.popularity = Math.max(0, seat.popularity - 0.5);
+                }
+                window.update(ref(window.database, `seats/${seatId}/popularity`), seat.popularity);
+            });
+        }
+
+        function updateChart(seats) {
+            const ctx = document.getElementById('peakHoursChart').getContext('2d');
+            const hours = Array.from({length: 24}, (_, i) => i + ':00');
+            const occupancyData = hours.map(() => 0);
+            
+            Object.values(seats).forEach(seat => {
+                if (seat.hourlyData) {
+                    seat.hourlyData.forEach((val, i) => {
+                        occupancyData[i] += val;
+                    });
+                }
+            });
+            
+            if (occupancyChart) {
+                occupancyChart.data.datasets[0].data = occupancyData;
+                occupancyChart.update();
+            } else {
+                occupancyChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: hours,
+                        datasets: [{
+                            label: 'Occupancy Count',
+                            data: occupancyData,
+                            backgroundColor: '#2A4B7C',
+                            borderColor: '#1a3a5c',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: { beginAtZero: true }
+                        }
+                    }
+                });
+            }
+        }
+
         window.toggleFilter = function() {
             filterActive = !filterActive;
             document.getElementById('filterBtn').classList.toggle('active');
             displaySeats(currentSeats);
         };
 
-        // Seat details modal
         window.showSeatDetails = function(seatId) {
             selectedSeat = seatId;
             const seat = currentSeats[seatId];
@@ -478,17 +574,10 @@
                 <div>📍 Location: ${seat.location || 'Center'}, Ground Floor</div>
                 <div>⚡ Socket: ${seat.socket ? '✅ Available' : '❌ Not Available'}</div>
                 <div>❄️ Near AC: ${seat.ac ? '✅ Yes' : '❌ No'}</div>
+                <div>📊 Popularity: ${Math.round(seat.popularity || 0)}%</div>
+                <div>🕒 Last Seen: ${seat.lastSeen || 'N/A'}</div>
             `;
             document.getElementById('modalDetails').innerHTML = detailsHtml;
-            
-            if (seat.status === 'occupied') {
-                document.getElementById('bookingSection').style.display = 'none';
-                document.getElementById('occupiedMessage').style.display = 'block';
-                document.getElementById('freeAtTime').textContent = seat.freeAt || 'unknown';
-            } else {
-                document.getElementById('bookingSection').style.display = 'block';
-                document.getElementById('occupiedMessage').style.display = 'none';
-            }
             
             document.getElementById('seatModal').classList.add('active');
         };
@@ -497,123 +586,82 @@
             document.getElementById('seatModal').classList.remove('active');
         };
 
-        // ✅ FIXED: Book seat with Firebase update
-        window.bookSeat = function() {
-            const seat = currentSeats[selectedSeat];
-            if (seat.status !== 'free') return;
-            
-            const duration = parseInt(document.getElementById('durationSelect').value);
-            const now = new Date();
-            const endTime = new Date(now.getTime() + duration * 60 * 60 * 1000);
-            
-            const formatTime = (date) => {
-                return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            };
-            
-            const freeAt = formatTime(endTime);
-            
-            // Update Firebase
-            const db = window.database;
-            const updates = {};
-            updates[`seats/${selectedSeat}/status`] = 'occupied';
-            updates[`seats/${selectedSeat}/freeAt`] = freeAt;
-            
-            window.update(ref(db), updates).then(() => {
-                console.log('✅ Firebase updated: seat occupied');
-                
-                // Update local data
-                if (currentSeats[selectedSeat]) {
-                    currentSeats[selectedSeat].status = 'occupied';
-                    currentSeats[selectedSeat].freeAt = freeAt;
-                }
-                
-                // Save booking
-                const booking = {
-                    seat: selectedSeat,
-                    date: now.toLocaleDateString(),
-                    startTime: formatTime(now),
-                    endTime: formatTime(endTime),
-                    duration: duration,
-                    active: true
-                };
-                
-                bookings.push(booking);
-                localStorage.setItem('bookings', JSON.stringify(bookings));
-                
-                closeModal();
-                
-                // Show confirmation
-                document.getElementById('confirmationDetails').innerHTML = `
-                    <p><strong>Seat:</strong> ${selectedSeat}</p>
-                    <p><strong>Time:</strong> ${booking.startTime} – ${booking.endTime} (${duration} hr${duration > 1 ? 's' : ''})</p>
-                    <p style="color: #28A745; margin-top: 20px;">✅ Successfully registered</p>
-                `;
-                
-                document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-                document.getElementById('confirmationPage').classList.add('active');
-                
-                // Refresh display
-                displaySeats(currentSeats);
-                updateStats(currentSeats);
-                
-            }).catch((error) => {
-                console.error('❌ Firebase update failed:', error);
-                alert('Booking failed. Please try again.');
-            });
+        // Admin functions
+        window.adminSetFree = function() {
+            const seatId = document.getElementById('adminSeatSelect').value;
+            window.update(ref(window.database, `seats/${seatId}/status`), 'free');
+            addAdminLog(`Admin set ${seatId} to FREE`);
+            showAlert(`Seat ${seatId} has been set to FREE by admin`);
         };
 
-        // Display bookings
-        function displayBookings() {
-            const activeDiv = document.getElementById('activeBookings');
-            const pastDiv = document.getElementById('pastBookings');
-            
-            const active = bookings.filter(b => b.active);
-            const past = bookings.filter(b => !b.active);
-            
-            if (active.length === 0) {
-                activeDiv.innerHTML = '<p>No active bookings</p>';
+        window.adminSetOccupied = function() {
+            const seatId = document.getElementById('adminSeatSelect').value;
+            window.update(ref(window.database, `seats/${seatId}/status`), 'occupied');
+            addAdminLog(`Admin set ${seatId} to OCCUPIED`);
+            showAlert(`Seat ${seatId} has been set to OCCUPIED by admin`);
+        };
+
+        function addAdminLog(message) {
+            const logs = JSON.parse(localStorage.getItem('adminLogs') || '[]');
+            logs.unshift({ time: new Date().toLocaleString(), message });
+            localStorage.setItem('adminLogs', JSON.stringify(logs.slice(0, 50)));
+            loadAdminLogs();
+        }
+
+        function loadAdminLogs() {
+            const logs = JSON.parse(localStorage.getItem('adminLogs') || '[]');
+            const logDiv = document.getElementById('adminLogs');
+            if (logs.length === 0) {
+                logDiv.innerHTML = 'No logs yet';
             } else {
-                activeDiv.innerHTML = active.map(b => `
-                    <div class="booking-card">
-                        <h3>Seat ${b.seat}</h3>
-                        <p>📅 ${b.date} | ${b.startTime} – ${b.endTime} (${b.duration} hrs)</p>
-                        <div>
-                            ${b.duration < 4 ? `<button class="action-btn extend-btn" onclick="extendBooking('${b.seat}')">Extend +1 hr</button>` : ''}
-                        </div>
-                    </div>
-                `).join('');
-            }
-            
-            if (past.length === 0) {
-                pastDiv.innerHTML = '<p>No past bookings</p>';
-            } else {
-                pastDiv.innerHTML = past.map(b => `
-                    <div class="booking-card past-booking">
-                        <h3>Seat ${b.seat}</h3>
-                        <p>📅 ${b.date} | ${b.startTime} – ${b.endTime} (${b.duration} hrs)</p>
-                    </div>
-                `).join('');
+                logDiv.innerHTML = logs.map(log => 
+                    `<div>[${log.time}] ${log.message}</div>`
+                ).join('');
             }
         }
 
-        // Extend booking
-        window.extendBooking = function(seatId) {
-            const booking = bookings.find(b => b.seat === seatId && b.active);
-            if (booking && booking.duration < 4) {
-                booking.duration += 1;
-                
-                const end = new Date();
-                const [hours, minutes] = booking.endTime.split(':');
-                end.setHours(parseInt(hours) + 1, parseInt(minutes));
-                
-                booking.endTime = end.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                
-                localStorage.setItem('bookings', JSON.stringify(bookings));
-                displayBookings();
-            }
-        };
+        function showAlert(message) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = 'alert-popup';
+            alertDiv.textContent = message;
+            document.body.appendChild(alertDiv);
+            setTimeout(() => alertDiv.remove(), 3000);
+        }
 
-        // Close modal on outside click
+        // Update last seen and track hourly data
+        setInterval(() => {
+            if (currentSeats) {
+                Object.keys(currentSeats).forEach(seatId => {
+                    const seat = currentSeats[seatId];
+                    const hour = new Date().getHours();
+                    if (!seat.hourlyData) seat.hourlyData = new Array(24).fill(0);
+                    if (seat.status === 'occupied') {
+                        seat.hourlyData[hour]++;
+                        window.update(ref(window.database, `seats/${seatId}/hourlyData`), seat.hourlyData);
+                    }
+                    seat.lastSeen = new Date().toLocaleTimeString();
+                    window.update(ref(window.database, `seats/${seatId}/lastSeen`), seat.lastSeen);
+                });
+                displaySeats(currentSeats);
+                updateChart(currentSeats);
+            }
+        }, 60000); // Update every minute
+
+        // Alert when seat becomes free
+        let previousStatus = {};
+        setInterval(() => {
+            if (currentSeats) {
+                Object.keys(currentSeats).forEach(seatId => {
+                    const current = currentSeats[seatId].status;
+                    const prev = previousStatus[seatId];
+                    if (prev === 'occupied' && current === 'free') {
+                        showAlert(`🎉 Seat ${seatId} is now FREE!`);
+                    }
+                    previousStatus[seatId] = current;
+                });
+            }
+        }, 5000);
+
         window.onclick = function(event) {
             const modal = document.getElementById('seatModal');
             if (event.target === modal) closeModal();
